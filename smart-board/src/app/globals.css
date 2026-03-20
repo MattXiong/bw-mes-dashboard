@@ -1,0 +1,153 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+    monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* SVG logo recolor: add webkit + standard filter for older Android browsers */
+.mes-logo-filter {
+  -webkit-filter: brightness(0) invert(1) drop-shadow(0 0 5px rgba(0, 242, 254, 0.5));
+  filter: brightness(0) invert(1) drop-shadow(0 0 5px rgba(0, 242, 254, 0.5));
+}
+
+/* MES Sci-Fi cut-corner frame + neon border line */
+.mes-cut-frame {
+  position: relative;
+  /* Important: edit mode needs scrolling (overflow-y-auto on the element) */
+  z-index: 0;
+}
+
+.mes-cut-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  clip-path: polygon(
+    0% 14px,
+    14px 0%,
+    calc(100% - 14px) 0%,
+    100% 14px,
+    100% calc(100% - 14px),
+    calc(100% - 14px) 100%,
+    14px 100%,
+    0% calc(100% - 14px)
+  );
+  -webkit-clip-path: polygon(
+    0% 14px,
+    14px 0%,
+    calc(100% - 14px) 0%,
+    100% 14px,
+    100% calc(100% - 14px),
+    calc(100% - 14px) 100%,
+    14px 100%,
+    0% calc(100% - 14px)
+  );
+  box-shadow: inset 0 0 0 1px rgba(0, 242, 254, 0.95),
+    0 0 10px rgba(0, 242, 254, 0.3);
+}
+
+/* Ensure the decorative frame never obscures table grid borders */
+.mes-cut-frame > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* LED indicator: on=bright green filled ring, off=dark red empty ring */
+.mes-led {
+  width: clamp(0.9rem, 1.1vw, 1.15rem);
+  height: clamp(0.9rem, 1.1vw, 1.15rem);
+  border-radius: 9999px;
+  /* Keep as inline-block so table-cell vertical-align behaves predictably */
+  display: inline-block;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.mes-led-pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.22),
+      0 0 18px rgba(34, 197, 94, 0.55);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.30),
+      0 0 26px rgba(34, 197, 94, 0.75);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.22),
+      0 0 18px rgba(34, 197, 94, 0.55);
+  }
+}
+
+.mes-led-on {
+  background: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.22),
+    0 0 18px rgba(34, 197, 94, 0.55);
+  animation: pulse 2s infinite;
+}
+
+.mes-led-off {
+  background: transparent;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.16),
+    0 0 10px rgba(239, 68, 68, 0.25);
+  border: 3px solid rgba(239, 68, 68, 0.75);
+}
+
+/* Attendance column strict geometry (fix: missing border / extra lines) */
+.attendance-led-td {
+  border: 1px solid #0d3a7d !important;
+  width: 120px !important;
+  min-width: 120px !important;
+  max-width: 120px !important;
+  display: table-cell !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+  /* Prevent horizontal padding from visually shrinking the cell rectangle */
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.attendance-led {
+  display: inline-block;
+}
+
+/* Hide scrollbar while keeping scroll behavior (e.g. kanban table in display mode) */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
